@@ -1,7 +1,7 @@
-FROM python:3.15.0-alpine3.24
+FROM python:3.16.0a2-alpine3.23
 
 LABEL maintainer='Luca Gambarino'
-LABEL version='3.15.0-build.3.24'
+LABEL version='3.16.0a2-alpine3.23'
 
 ADD . /code
 WORKDIR /code
