@@ -1,16 +1,24 @@
-FROM python:3.16.0a2-alpine3.23
+FROM python:3.13-alpine3.21
 
 LABEL maintainer='Luca Gambarino'
-LABEL version='3.16.0a2-alpine3.23'
+LABEL version='3.13-alpine3.21'
 
 ADD . /code
 WORKDIR /code
+
 RUN \
-  apk add --no-cache libc-dev libffi-dev gcc && \
-  pip install -r requirements.txt --no-cache-dir && \
-  apk del gcc libc-dev libffi-dev && \
-  addgroup webssh && \
-  adduser -Ss /bin/false -g webssh webssh && \
+  apk add --no-cache --virtual .build-deps \
+    gcc \
+    libc-dev \
+    libffi-dev \
+    openssl-dev \
+    python3-dev \
+    cargo \
+    make && \
+  pip install --no-cache-dir -r requirements.txt && \
+  apk del .build-deps && \
+  addgroup -S webssh && \
+  adduser -S -s /bin/false -G webssh webssh && \
   chown -R webssh:webssh /code
 
 EXPOSE 8888/tcp
